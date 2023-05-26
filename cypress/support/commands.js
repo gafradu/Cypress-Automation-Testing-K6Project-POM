@@ -1,41 +1,63 @@
 import { faker } from "@faker-js/faker";
-import LeftSideMenuPage from "../pages/LeftSideMenuPage";
-import Login from "../pages/Login";
-import Register from "../pages/Register";
-import RecoverPassword from "../pages/RecoverPassword";
+import MainPage from "../pages/MainPage";
+import MyAccountPage from "../pages/MyAccountPage";
+import GeneralMethods from "../pages/GeneralMethods";
+import CheckoutPage from "../pages/CheckoutPage";
 
-Cypress.Commands.add("login", (email, password) => {
-  LeftSideMenuPage.getForms().click();
-  LeftSideMenuPage.getLogin().click();
-  Login.getEmailAddress().type(email);
-  Login.getPassword().type(password);
-  Login.getSubmitButton().click();
+Cypress.Commands.add("registerNewUser", (randomFirstName, randomLastName) => {
+  let username = GeneralMethods.generateUsername(
+    randomFirstName,
+    randomLastName
+  );
+  let emailAddress = GeneralMethods.generateEmailAddress(username);
+
+  MainPage.getMyAccountPage().click();
+  MyAccountPage.getRegisterEmail().type(emailAddress);
+  MyAccountPage.getRegisterButton().click();
 });
 
-Cypress.Commands.add(
-  "register",
-  (firstName, lastName, phoneNumber, country, password) => {
-    LeftSideMenuPage.getForms().click();
-    LeftSideMenuPage.getRegister().click();
-    Register.getFirstName().type(firstName);
-    Register.getFirstName().type(lastName);
-    Register.getPhoneNumber().type(phoneNumber);
-    Register.getCountry().select(country);
-    Register.getEmailAddress().type(
-      faker.internet.email({
-        firstName: firstName,
-        lastName: lastName,
-      })
-    );
-    Register.getPassword().type(password);
-    Register.getAgreeCheckbox().click();
-    Register.getRegisterButton().click();
-  }
-);
+Cypress.Commands.add("completeCheckoutInformation", () => {
+  const randomFirstName = faker.person.firstName();
+  CheckoutPage.getFirstName().type(randomFirstName);
 
-Cypress.Commands.add("recoverPassword", (email) => {
-  LeftSideMenuPage.getForms().click();
-  LeftSideMenuPage.getRecoverPassword().click();
-  RecoverPassword.getEmailAddress().type(email);
-  RecoverPassword.getRecoverPasswordButton().click();
+  const randomLastName = faker.person.lastName();
+  CheckoutPage.getLastName().type(randomLastName);
+
+  const randomCompany = faker.company.name();
+  CheckoutPage.getCompany().type(randomCompany);
+
+  const Country = "Romania";
+  CheckoutPage.getCountry().select(Country, { force: true });
+
+  const randomStreetAddress1 = faker.location.streetAddress(false);
+  CheckoutPage.getStreetAddress1().type(randomStreetAddress1);
+
+  const randomStreetAddress2 = faker.location.secondaryAddress();
+  CheckoutPage.getStreetAddress2().type(randomStreetAddress2);
+
+  const randomCity = faker.location.city();
+  CheckoutPage.getCity().type(randomCity);
+
+  const County = "Vrancea";
+  CheckoutPage.getCounty().select(County, { force: true });
+
+  const randomZipCode = faker.location.zipCode();
+  CheckoutPage.getZipCode().type(randomZipCode);
+
+  const randomPhoneNumber = faker.phone.number("+40 77 ### ## ##");
+  CheckoutPage.getPhone().type(randomPhoneNumber);
+
+  const username = GeneralMethods.generateUsername(
+    randomFirstName,
+    randomLastName
+  );
+  const emailAddress = GeneralMethods.generateEmailAddress(username);
+  CheckoutPage.getEmail().type(emailAddress);
+
+  CheckoutPage.getCreateAccountCheckbox().click();
+
+  const randomAdditionalInformation = faker.lorem.sentence(30);
+  CheckoutPage.getAdditionalInformationField().type(
+    randomAdditionalInformation
+  );
 });
