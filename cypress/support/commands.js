@@ -61,3 +61,10 @@ Cypress.Commands.add("completeCheckoutInformation", () => {
     randomAdditionalInformation
   );
 });
+
+Cypress.Commands.add("interceptAPI", (methodTypeAPI, urlAPI, aliasApi) => {
+cy.intercept({
+  method: `${methodTypeAPI}`,
+  url: `${urlAPI}`,
+}).as(`${aliasApi}`);
+});

@@ -3,8 +3,8 @@ import MyAccountPage from "../../pages/MyAccountPage";
 import AccountDetailsPage from "../../pages/AccountDetailsPage";
 import { faker } from "@faker-js/faker";
 
-let randomFirstName = faker.person.firstName();
-let randomLastName = faker.person.lastName();
+let randomFirstName = " ";
+let randomLastName = " ";
 const password = faker.internet.password();
 
 describe("Edit Account Details Positive and Negative Scenarios", () => {
@@ -12,7 +12,7 @@ describe("Edit Account Details Positive and Negative Scenarios", () => {
     let randomFirstName = faker.person.firstName();
     let randomLastName = faker.person.lastName();
     cy.visit("http://ecommerce.test.k6.io/");
-    cy.registerNewUser(randomFirstName,randomLastName);
+    cy.registerNewUser(randomFirstName, randomLastName);
   });
 
   it("Try to update account details w/o entering values for all fields", () => {
